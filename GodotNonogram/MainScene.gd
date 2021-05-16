@@ -21,6 +21,8 @@ const ColorClues = Color("#dff9fb")
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
+	$TileMap.set_cell(0, 0, 0)
+	$TileMap.set_cell(1, 1, 1)
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
