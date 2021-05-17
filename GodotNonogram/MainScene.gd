@@ -23,28 +23,63 @@ func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
 	#$TileMap.set_cell(0, 0, 0)
 	#$TileMap.set_cell(1, 1, 1)
+	#$TileMap.set_cell(1, -1, 2)
+	#$TileMap.set_cell(1, -2, 3)
+	#$TileMap.set_cell(1, -3, 4)
+	#$TileMap.set_cell(1, -4, 5)
+	#$TileMap.set_cell(1, -5, 6)
+	#$TileMap.set_cell(2, -1, 6+1)
+	#$TileMap.set_cell(2, -2, 7+1)
+	#$TileMap.set_cell(2, -3, 8+1)
+	#$TileMap.set_cell(2, -4, 9+1)
+	#$TileMap.set_cell(2, -5, 10+1)
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
-	"""
-	#draw_rect(Rect2(BOARD_X0, BOARD_Y0, BOARD_WIDTH, BOARD_HEIGHT), Color(1, 1, 1))
-	draw_rect(Rect2(ANS_X0, ANS_Y0, ANS_WIDTH, ANS_HEIGHT), Color(1, 1, 1))		# 解答エリア
-	draw_rect(Rect2(ANS_X0, BOARD_Y0, ANS_WIDTH, CELL_WIDTH*5), ColorClues)		# 手がかりエリア
-	draw_rect(Rect2(BOARD_X0, ANS_Y0, CELL_WIDTH*5, ANS_HEIGHT), ColorClues)		# 手がかりエリア
-	
-	var y = BOARD_Y0 + CELL_WIDTH * 5
-	var y2 = BOARD_Y0 + BOARD_HEIGHT
-	for k in range(N_CELL_HORZ+1):		# 縦線
-		var y1 = y if k < 5 else BOARD_Y0
-		var wd = 1 if k % 5 != 0 else 2
-		draw_line(Vector2(BOARD_X0+k*CELL_WIDTH, y1), Vector2(BOARD_X0+k*CELL_WIDTH, y2), Color("#000000"), wd)
-	var x = BOARD_X0 + CELL_WIDTH * 5
-	var x2 = BOARD_X0 + BOARD_WIDTH
-	for k in range(N_CELL_VERT+1):		# 横線
-		var x1 = x if k < 5 else BOARD_X0
-		var wd = 1 if k % 5 != 0 else 2
-		draw_line(Vector2(x1, BOARD_Y0+k*CELL_WIDTH), Vector2(x2, BOARD_Y0+k*CELL_WIDTH), Color("#000000"), wd)
-	"""
+	pass
+func update_clues(x0, y0):
+	# 水平方向手がかり数字
+	var lst = []
+	var x = N_ANS_HORZ - 1
+	while x >= 0:
+		while x >= 0 && $TileMap.get_cell(x, y0) != 1:
+			x -= 1
+		if x < 0:
+			break
+		var n = 0
+		while x >= 0 && $TileMap.get_cell(x, y0) == 1:
+			x -= 1
+			n += 1
+		lst.push_back(n)
+	print(lst)
+	x = -1
+	for i in range(lst.size()):
+		$TileMap.set_cell(x, y0, lst[i] + 1)
+		x -= 1
+	while x >= -5:
+		$TileMap.set_cell(x, y0, -1)
+		x -= 1
+	# 垂直方向手がかり数字
+	lst = []
+	var y = N_ANS_VERT - 1
+	while y >= 0:
+		while y >= 0 && $TileMap.get_cell(x0, y) != 1:
+			y -= 1
+		if y < 0:
+			break
+		var n = 0
+		while y >= 0 && $TileMap.get_cell(x0, y) == 1:
+			y -= 1
+			n += 1
+		lst.push_back(n)
+	print(lst)
+	y = -1
+	for i in range(lst.size()):
+		$TileMap.set_cell(x0, y, lst[i] + 1)
+		y -= 1
+	while y >= -5:
+		$TileMap.set_cell(x0, y, -1)
+		y -= 1
 	pass
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
@@ -64,3 +99,4 @@ func _input(event):
 			var v = $TileMap.get_cell(xy.x, xy.y)
 			v = 1 if v < 0 else v - 1
 			$TileMap.set_cell(xy.x, xy.y, v)
+			update_clues(xy.x, xy.y)
