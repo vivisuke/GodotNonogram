@@ -21,8 +21,8 @@ const ColorClues = Color("#dff9fb")
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
-	$TileMap.set_cell(0, 0, 0)
-	$TileMap.set_cell(1, 1, 1)
+	#$TileMap.set_cell(0, 0, 0)
+	#$TileMap.set_cell(1, 1, 1)
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
@@ -46,3 +46,21 @@ func _draw():
 		draw_line(Vector2(x1, BOARD_Y0+k*CELL_WIDTH), Vector2(x2, BOARD_Y0+k*CELL_WIDTH), Color("#000000"), wd)
 	"""
 	pass
+func posToXY(pos):
+	var xy = Vector2(-1, -1)
+	var X0 = $TileMap.position.x
+	var Y0 = $TileMap.position.y
+	if pos.x >= X0 && pos.x < X0 + CELL_WIDTH*N_ANS_HORZ:
+		if pos.y >= Y0 && pos.y < Y0 + CELL_WIDTH*N_ANS_VERT:
+			xy.x = floor((pos.x - X0) / CELL_WIDTH)
+			xy.y = floor((pos.y - Y0) / CELL_WIDTH)
+	return xy
+func _input(event):
+	if event is InputEventMouseButton && event.pressed:
+		#print(event.position)
+		var xy = posToXY(event.position)
+		print(xy)
+		if xy.x >= 0:
+			var v = $TileMap.get_cell(xy.x, xy.y)
+			v = 1 if v < 0 else v - 1
+			$TileMap.set_cell(xy.x, xy.y, v)
