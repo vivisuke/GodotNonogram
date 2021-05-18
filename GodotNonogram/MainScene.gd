@@ -21,6 +21,7 @@ const BOARD_X0 = (SCREEN_WIDTH - BOARD_WIDTH) / 2	# 手がかり領域左端座�
 const ANS_X0 = BOARD_X0 + CELL_WIDTH * 5			# 解答領域左端座標
 const ColorClues = Color("#dff9fb")
 
+var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
 var cell_val = 0
@@ -97,6 +98,8 @@ func posToXY(pos):
 			xy.y = floor((pos.y - Y0) / CELL_WIDTH)
 	return xy
 func _input(event):
+	if dialog_opened:
+		return;
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("click"):
 			#print(event.position)
@@ -143,4 +146,22 @@ func clear_all():
 	pass
 func _on_ClearButton_pressed():
 	clear_all()
+	pass # Replace with function body.
+
+
+func _on_OpenButton_pressed():
+	pass # Replace with function body.
+
+
+func _on_SaveButton_pressed():
+	var dlg = FileDialog.new()
+	add_child(dlg)
+	dlg.mode = FileDialog.MODE_SAVE_FILE 
+	#dlg.window_title = "GDNonogram - Save File -"
+	dlg.resizable = true
+	dlg.current_dir = "user://"
+	dlg.current_path = "user://notitle.txt"
+	dlg.rect_size = Vector2(SCREEN_WIDTH, SCREEN_HEIGHT)
+	dlg.popup_centered()
+	dialog_opened = true;
 	pass # Replace with function body.

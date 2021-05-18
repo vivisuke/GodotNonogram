@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://images/board.png" type="Texture" id=2]
@@ -17,6 +17,10 @@
 [ext_resource path="res://images/black10x10.png" type="Texture" id=15]
 [ext_resource path="res://images/clear_black.png" type="Texture" id=16]
 [ext_resource path="res://images/clear_white.png" type="Texture" id=17]
+[ext_resource path="res://images/open_black.png" type="Texture" id=18]
+[ext_resource path="res://images/open_white.png" type="Texture" id=19]
+[ext_resource path="res://images/save_white.png" type="Texture" id=20]
+[ext_resource path="res://images/save_black.png" type="Texture" id=21]
 
 [sub_resource type="TileSet" id=1]
 0/name = "cross30x30.png 0"
@@ -250,4 +254,30 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OpenButton" type="TextureButton" parent="."]
+margin_left = 126.0
+margin_top = 649.0
+margin_right = 222.0
+margin_bottom = 745.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 18 )
+texture_pressed = ExtResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SaveButton" type="TextureButton" parent="."]
+margin_left = 196.0
+margin_top = 652.0
+margin_right = 292.0
+margin_bottom = 748.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 21 )
+texture_pressed = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
+[connection signal="pressed" from="OpenButton" to="." method="_on_OpenButton_pressed"]
+[connection signal="pressed" from="SaveButton" to="." method="_on_SaveButton_pressed"]
