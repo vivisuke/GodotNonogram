@@ -21,6 +21,10 @@ const BOARD_X0 = (SCREEN_WIDTH - BOARD_WIDTH) / 2	# 手がかり領域左端座�
 const ANS_X0 = BOARD_X0 + CELL_WIDTH * 5			# 解答領域左端座標
 const ColorClues = Color("#dff9fb")
 
+var mouse_pushed = false
+var last_xy = Vector2()
+var cell_val = 0
+
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
 	#$TileMap.set_cell(0, 0, 0)
@@ -93,18 +97,39 @@ func posToXY(pos):
 			xy.y = floor((pos.y - Y0) / CELL_WIDTH)
 	return xy
 func _input(event):
-	if event is InputEventMouseButton && event.pressed:
-		#print(event.position)
+	if event is InputEventMouseButton:
+		if event.is_action_pressed("click"):
+			#print(event.position)
+			var xy = posToXY(event.position)
+			print(xy)
+			if xy.x >= 0:
+				mouse_pushed = true;
+				last_xy = xy
+				var v = $TileMap.get_cell(xy.x, xy.y)
+				#v = 1 if v < 0 else v - 1
+				v = -v;
+				cell_val = v
+				$TileMap.set_cell(xy.x, xy.y, v)
+				update_clues(xy.x, xy.y)
+				var img = 0 if v == 1 else -1
+				$ImageTileMap.set_cell(xy.x, xy.y, img)
+		elif event.is_action_released("click"):
+			mouse_pushed = false;
+			print("click released")
+	elif event is InputEventMouseMotion && mouse_pushed:
 		var xy = posToXY(event.position)
-		print(xy)
-		if xy.x >= 0:
-			var v = $TileMap.get_cell(xy.x, xy.y)
-			#v = 1 if v < 0 else v - 1
-			v = -v;
-			$TileMap.set_cell(xy.x, xy.y, v)
+		if xy.x >= 0 && xy != last_xy:
+			print(xy)
+			last_xy = xy
+			$TileMap.set_cell(xy.x, xy.y, cell_val)
 			update_clues(xy.x, xy.y)
-			var img = 0 if v == 1 else -1
+			var img = 0 if cell_val == 1 else -1
 			$ImageTileMap.set_cell(xy.x, xy.y, img)
+	pass
+#func _process(delta):
+#	if Input.is_action_just_released("click"):
+#		print("click released")
+		
 func clear_all():
 	for y in range(N_CELL_VERT):
 		for x in range(N_CELL_HORZ):
