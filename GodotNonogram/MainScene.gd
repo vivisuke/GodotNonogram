@@ -25,6 +25,8 @@ var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
 var cell_val = 0
+var h_map = {}		# 水平方向手がかり数字 → 数値マップ
+var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
@@ -40,8 +42,17 @@ func _ready():
 	#$TileMap.set_cell(2, -3, 8+1)
 	#$TileMap.set_cell(2, -4, 9+1)
 	#$TileMap.set_cell(2, -5, 10+1)
-	var t = data_to_clues(0xd0e)
-	print(t)
+	#var t = data_to_clues(0xd0e)
+	#print(t)
+	#var map = {}
+	#map[[1, 2]] = [12, 3]
+	#print(map)
+	#print(map[[1, 2]])
+	build_map()
+	print("h_map.size() = ", h_map.size())
+	#print(h_map)
+	for i in range(h_map.size()):
+		print(h_map.keys()[i], ": ", h_map.values()[i])
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
@@ -59,6 +70,14 @@ func data_to_clues(data : int) -> Array:
 			n += 1
 		lst.push_front(n)
 	return lst
+func build_map():
+	h_map.clear()
+	for data in range(1<<N_ANS_HORZ):
+		var key = data_to_clues(data)
+		if h_map.has(key):
+			h_map[key].push_back(data)
+		else:
+			h_map[key] = [data]
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
 	var lst = []
