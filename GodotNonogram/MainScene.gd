@@ -40,10 +40,25 @@ func _ready():
 	#$TileMap.set_cell(2, -3, 8+1)
 	#$TileMap.set_cell(2, -4, 9+1)
 	#$TileMap.set_cell(2, -5, 10+1)
+	var t = data_to_clues(0xd0e)
+	print(t)
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
 	pass
+func data_to_clues(data : int) -> Array:
+	var lst = []
+	while data != 0:
+		var b = data & -data
+		data ^= b
+		var n = 1
+		b <<= 1
+		while (data & b) != 0:
+			data ^= b
+			b <<= 1
+			n += 1
+		lst.push_front(n)
+	return lst
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
 	var lst = []
