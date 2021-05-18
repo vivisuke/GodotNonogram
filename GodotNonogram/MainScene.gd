@@ -9,6 +9,8 @@ const N_CELL_HORZ = 15
 const N_CELL_VERT = 15
 const N_ANS_HORZ = 10
 const N_ANS_VERT = 10
+const N_CLUES_HORZ = 5
+const N_CLUES_VERT = 5
 const BOARD_WIDTH = CELL_WIDTH * N_CELL_HORZ		# 手かがり領域を含めた盤面全体幅
 const BOARD_HEIGHT = CELL_WIDTH * N_CELL_VERT
 const ANS_WIDTH = CELL_WIDTH * N_ANS_HORZ
@@ -97,6 +99,23 @@ func _input(event):
 		print(xy)
 		if xy.x >= 0:
 			var v = $TileMap.get_cell(xy.x, xy.y)
-			v = 1 if v < 0 else v - 1
+			#v = 1 if v < 0 else v - 1
+			v = -v;
 			$TileMap.set_cell(xy.x, xy.y, v)
 			update_clues(xy.x, xy.y)
+			var img = 0 if v == 1 else -1
+			$ImageTileMap.set_cell(xy.x, xy.y, img)
+func clear_all():
+	for y in range(N_CELL_VERT):
+		for x in range(N_CELL_HORZ):
+			$TileMap.set_cell(x, y, -1)
+			$ImageTileMap.set_cell(x, y, -1)
+		for x in range(N_CLUES_HORZ):
+			$TileMap.set_cell(-x-1, y, -1)
+	for x in range(N_CELL_HORZ):
+		for y in range(N_CLUES_VERT):
+			$TileMap.set_cell(x, -y-1, -1)
+	pass
+func _on_ClearButton_pressed():
+	clear_all()
+	pass # Replace with function body.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://images/board.png" type="Texture" id=2]
@@ -14,6 +14,9 @@
 [ext_resource path="res://images/num5.png" type="Texture" id=12]
 [ext_resource path="res://images/num7.png" type="Texture" id=13]
 [ext_resource path="res://images/num8.png" type="Texture" id=14]
+[ext_resource path="res://images/black10x10.png" type="Texture" id=15]
+[ext_resource path="res://images/clear_black.png" type="Texture" id=16]
+[ext_resource path="res://images/clear_white.png" type="Texture" id=17]
 
 [sub_resource type="TileSet" id=1]
 0/name = "cross30x30.png 0"
@@ -185,6 +188,22 @@
 11/shapes = [  ]
 11/z_index = 0
 
+[sub_resource type="TileSet" id=2]
+0/name = "black10x10.png 0"
+0/texture = ExtResource( 15 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 10, 10 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -203,3 +222,32 @@ position = Vector2( 155, 250 )
 tile_set = SubResource( 1 )
 cell_size = Vector2( 30, 30 )
 format = 1
+
+[node name="ImageRect" type="ColorRect" parent="."]
+margin_left = 5.0
+margin_top = 100.0
+margin_right = 150.0
+margin_bottom = 245.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ImageTileMap" type="TileMap" parent="."]
+position = Vector2( 27, 122 )
+tile_set = SubResource( 2 )
+cell_size = Vector2( 10, 10 )
+format = 1
+
+[node name="ClearButton" type="TextureButton" parent="."]
+margin_left = 48.0
+margin_top = 648.0
+margin_right = 144.0
+margin_bottom = 744.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 16 )
+texture_pressed = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
