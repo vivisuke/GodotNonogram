@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://images/board.png" type="Texture" id=2]
@@ -22,6 +22,8 @@
 [ext_resource path="res://images/save_white.png" type="Texture" id=20]
 [ext_resource path="res://images/save_black.png" type="Texture" id=21]
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=22]
+[ext_resource path="res://images/check_black.png" type="Texture" id=23]
+[ext_resource path="res://images/check_white.png" type="Texture" id=24]
 
 [sub_resource type="TileSet" id=1]
 0/name = "cross30x30.png 0"
@@ -304,6 +306,29 @@ custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Save"
 
+[node name="CheckButton" type="TextureButton" parent="."]
+margin_left = 268.363
+margin_top = 633.74
+margin_right = 364.363
+margin_bottom = 729.74
+rect_scale = Vector2( 0.5, 0.5 )
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CheckButton"]
+margin_left = 15.0
+margin_top = 88.0
+margin_right = 92.0
+margin_bottom = 124.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Check"
+
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="OpenButton" to="." method="_on_OpenButton_pressed"]
 [connection signal="pressed" from="SaveButton" to="." method="_on_SaveButton_pressed"]
+[connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]

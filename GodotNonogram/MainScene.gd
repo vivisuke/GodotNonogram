@@ -186,3 +186,7 @@ func _on_SaveButton_pressed():
 	dlg.popup_centered()
 	dialog_opened = true;
 	pass # Replace with function body.
+
+
+func _on_CheckButton_pressed():
+	pass # Replace with function body.
