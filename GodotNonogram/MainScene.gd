@@ -28,6 +28,8 @@ var last_xy = Vector2()
 var cell_val = 0
 var h_map = {}		# 水平方向手がかり数字 → 数値マップ
 var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
+var h_clues = []		# 水平方向手がかり数字リスト
+var v_clues = []		# 垂直方向手がかり数字リスト
 var h_candidates = []	# 水平方向候補リスト
 var v_candidates = []	# 垂直方向候補リスト
 var h_fixed_bits_1 = []
@@ -60,6 +62,8 @@ func _ready():
 	#print(h_map)
 	#for i in range(h_map.size()):
 	#	print(h_map.keys()[i], ": ", h_map.values()[i])
+	h_clues.resize(N_ANS_VERT)
+	v_clues.resize(N_ANS_HORZ)
 	h_candidates.resize(N_ANS_VERT)
 	v_candidates.resize(N_ANS_HORZ)
 	print(h_candidates)
@@ -81,6 +85,7 @@ func data_to_clues(data : int) -> Array:
 			n += 1
 		lst.push_back(n)
 	return lst
+# key は連配列、下位ビットの方が配列先頭
 func build_map():
 	h_map.clear()
 	for data in range(1<<N_ANS_HORZ):
@@ -99,6 +104,7 @@ func update_clues(x0, y0):
 	for x in range(N_ANS_HORZ):
 		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
 	var lst = data_to_clues(data)
+	h_clues[y0] = lst;
 	var x = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
@@ -111,6 +117,7 @@ func update_clues(x0, y0):
 	for y in range(N_ANS_VERT):
 		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
 	lst = data_to_clues(data)
+	v_clues[x0] = lst;
 	var y = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
