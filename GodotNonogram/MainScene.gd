@@ -26,8 +26,9 @@ var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
 var cell_val = 0
-var h_map = {}		# 水平方向手がかり数字 → 数値マップ
-var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
+var g_map = {}		# 水平・垂直方向手がかり数字配列 → 候補数値マップ
+#var h_map = {}		# 水平方向手がかり数字 → 数値マップ
+#var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
 var h_clues = []		# 水平方向手がかり数字リスト
 var v_clues = []		# 垂直方向手がかり数字リスト
 var h_candidates = []	# 水平方向候補リスト
@@ -87,14 +88,49 @@ func data_to_clues(data : int) -> Array:
 	return lst
 # key は連配列、下位ビットの方が配列先頭
 func build_map():
-	h_map.clear()
+	g_map.clear()
 	for data in range(1<<N_ANS_HORZ):
 		var key = data_to_clues(data)
-		if h_map.has(key):
-			h_map[key].push_back(data)
+		if g_map.has(key):
+			g_map[key].push_back(data)
 		else:
-			h_map[key] = [data]
+			g_map[key] = [data]
+func to_BinText(d : int) -> String:
+	var txt = ""
+	var mask = 1 << (N_ANS_HORZ - 1)
+	while mask != 0:
+		txt += '1' if (d&mask) != 0 else '0'
+		mask >>= 1
+	return txt
+func to_hexText(lst : Array) -> String:
+	var txt = "["
+	for i in range(lst.size()):
+		txt += to_BinText(lst[i])
+		txt += ", "
+	txt += "]"
+	return txt
+func init_candidates():
+	h_candidates.resize(N_ANS_VERT)
+	v_candidates.resize(N_ANS_HORZ)
+	for y in range(N_ANS_VERT):
+		if h_clues[y] == null:
+			h_candidates[y] = [0]
+		else:
+			h_candidates[y] = g_map[h_clues[y]]
+		print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+	for x in range(N_ANS_HORZ):
+		if v_clues[x] == null:
+			v_candidates[x] = [0]
+		else:
+			v_candidates[x] = g_map[v_clues[x]]
+		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
 func init_h_fixed():
+	for y in range(N_ANS_VERT):
+		#print(h_clues[y])
+		if h_clues[y] != null:
+			print( to_hexText(g_map[h_clues[y]]) )
+		else:
+			print("[0]")
 	#for y in range(N_ANS_VERT):
 		
 	pass
@@ -206,4 +242,6 @@ func _on_SaveButton_pressed():
 
 
 func _on_CheckButton_pressed():
+	init_candidates()
+	#init_h_fixed()
 	pass # Replace with function body.
