@@ -19,6 +19,7 @@ const BOARD_Y0 = 100								# 手がかり領域上端座標
 const ANS_Y0 = BOARD_Y0 + CELL_WIDTH * 5			# 解答領域上端座標
 const BOARD_X0 = (SCREEN_WIDTH - BOARD_WIDTH) / 2	# 手がかり領域左端座標
 const ANS_X0 = BOARD_X0 + CELL_WIDTH * 5			# 解答領域左端座標
+const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
 var dialog_opened = false;
@@ -29,6 +30,10 @@ var h_map = {}		# 水平方向手がかり数字 → 数値マップ
 var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
 var h_candidates = []	# 水平方向候補リスト
 var v_candidates = []	# 垂直方向候補リスト
+var h_fixed_bits_1 = []
+var h_fixed_bits_0 = []
+var v_fixed_bits_1 = []
+var v_fixed_bits_0 = []
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
@@ -60,8 +65,9 @@ func _ready():
 	print(h_candidates)
 	pass
 func _draw():
-	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
+	#draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
 	pass
+# 101101110 → [3, 2, 1]	下位ビットの方が配列先頭とする
 func data_to_clues(data : int) -> Array:
 	var lst = []
 	while data != 0:
@@ -73,7 +79,7 @@ func data_to_clues(data : int) -> Array:
 			data ^= b
 			b <<= 1
 			n += 1
-		lst.push_front(n)
+		lst.push_back(n)
 	return lst
 func build_map():
 	h_map.clear()
@@ -83,6 +89,10 @@ func build_map():
 			h_map[key].push_back(data)
 		else:
 			h_map[key] = [data]
+func init_h_fixed():
+	#for y in range(N_ANS_VERT):
+		
+	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
 	var data = 0
@@ -91,7 +101,7 @@ func update_clues(x0, y0):
 	var lst = data_to_clues(data)
 	var x = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x, y0, lst[i] + 1)
+		$TileMap.set_cell(x, y0, lst[i] + TILE_NUM_0)
 		x -= 1
 	while x >= -5:
 		$TileMap.set_cell(x, y0, -1)
@@ -103,7 +113,7 @@ func update_clues(x0, y0):
 	lst = data_to_clues(data)
 	var y = -1
 	for i in range(lst.size()):
-		$TileMap.set_cell(x0, y, lst[i] + 1)
+		$TileMap.set_cell(x0, y, lst[i] + TILE_NUM_0)
 		y -= 1
 	while y >= -5:
 		$TileMap.set_cell(x0, y, -1)

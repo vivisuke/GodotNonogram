@@ -218,6 +218,14 @@ font_data = ExtResource( 22 )
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
 
+[node name="BG" type="ColorRect" parent="."]
+margin_right = 460.0
+margin_bottom = 800.0
+color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="BoardBG" type="TextureRect" parent="."]
 margin_left = 4.0
 margin_top = 99.0
@@ -241,10 +249,10 @@ cell_size = Vector2( 10, 10 )
 format = 1
 
 [node name="ClearButton" type="TextureButton" parent="."]
-margin_left = 48.0
-margin_top = 648.0
-margin_right = 144.0
-margin_bottom = 744.0
+margin_left = 50.0
+margin_top = 650.0
+margin_right = 146.0
+margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 16 )
 texture_pressed = ExtResource( 17 )
@@ -263,10 +271,10 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Clear"
 
 [node name="OpenButton" type="TextureButton" parent="."]
-margin_left = 126.0
-margin_top = 649.0
-margin_right = 222.0
-margin_bottom = 745.0
+margin_left = 125.0
+margin_top = 650.0
+margin_right = 221.0
+margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 18 )
 texture_pressed = ExtResource( 19 )
@@ -285,10 +293,10 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Open"
 
 [node name="SaveButton" type="TextureButton" parent="."]
-margin_left = 196.0
-margin_top = 652.0
-margin_right = 292.0
-margin_bottom = 748.0
+margin_left = 200.0
+margin_top = 650.0
+margin_right = 296.0
+margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 20 )
@@ -307,10 +315,10 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Save"
 
 [node name="CheckButton" type="TextureButton" parent="."]
-margin_left = 268.363
-margin_top = 633.74
-margin_right = 364.363
-margin_bottom = 729.74
+margin_left = 275.0
+margin_top = 650.0
+margin_right = 371.0
+margin_bottom = 746.0
 rect_scale = Vector2( 0.5, 0.5 )
 texture_normal = ExtResource( 23 )
 texture_pressed = ExtResource( 24 )
@@ -327,6 +335,9 @@ margin_bottom = 124.0
 custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Check"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="ClearButton" to="." method="_on_ClearButton_pressed"]
 [connection signal="pressed" from="OpenButton" to="." method="_on_OpenButton_pressed"]
