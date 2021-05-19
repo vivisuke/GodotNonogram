@@ -85,20 +85,11 @@ func build_map():
 			h_map[key] = [data]
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
-	var lst = []
-	var x = N_ANS_HORZ - 1
-	while x >= 0:
-		while x >= 0 && $TileMap.get_cell(x, y0) != 1:
-			x -= 1
-		if x < 0:
-			break
-		var n = 0
-		while x >= 0 && $TileMap.get_cell(x, y0) == 1:
-			x -= 1
-			n += 1
-		lst.push_back(n)
-	print(lst)
-	x = -1
+	var data = 0
+	for x in range(N_ANS_HORZ):
+		data = data * 2 + (1 if $TileMap.get_cell(x, y0) == 1 else 0)
+	var lst = data_to_clues(data)
+	var x = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x, y0, lst[i] + 1)
 		x -= 1
@@ -106,20 +97,11 @@ func update_clues(x0, y0):
 		$TileMap.set_cell(x, y0, -1)
 		x -= 1
 	# 垂直方向手がかり数字
-	lst = []
-	var y = N_ANS_VERT - 1
-	while y >= 0:
-		while y >= 0 && $TileMap.get_cell(x0, y) != 1:
-			y -= 1
-		if y < 0:
-			break
-		var n = 0
-		while y >= 0 && $TileMap.get_cell(x0, y) == 1:
-			y -= 1
-			n += 1
-		lst.push_back(n)
-	print(lst)
-	y = -1
+	data = 0
+	for y in range(N_ANS_VERT):
+		data = data * 2 + (1 if $TileMap.get_cell(x0, y) == 1 else 0)
+	lst = data_to_clues(data)
+	var y = -1
 	for i in range(lst.size()):
 		$TileMap.set_cell(x0, y, lst[i] + 1)
 		y -= 1
