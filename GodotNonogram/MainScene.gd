@@ -121,13 +121,13 @@ func init_candidates():
 			h_candidates[y] = [0]
 		else:
 			h_candidates[y] = g_map[h_clues[y]]
-		print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	for x in range(N_ANS_HORZ):
 		if v_clues[x] == null:
 			v_candidates[x] = [0]
 		else:
 			v_candidates[x] = g_map[v_clues[x]]
-		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
 func init_h_fixed():
 	print("\n*** init_h_fixed():")
 	h_fixed_bits_1.resize(N_ANS_HORZ)
@@ -151,6 +151,23 @@ func init_h_fixed():
 			h_fixed_bits_1[y] = bits1
 			h_fixed_bits_0[y] = bits0
 		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	pass
+func hFixed_to_vFixed():
+	print("\n*** hFixed_to_vFixed():")
+	for x in range(N_ANS_HORZ):
+		v_fixed_bits_1[x] = 0
+		v_fixed_bits_0[x] = 0
+	var hmask = 1 << N_ANS_HORZ;
+	for x in range(N_ANS_HORZ):
+		hmask >>= 1
+		var vmask = 1 << N_ANS_VERT;
+		for y in range(N_ANS_VERT):
+			vmask >>= 1
+			if( (h_fixed_bits_1[y] & hmask) != 0 ):
+				v_fixed_bits_1[x] |= vmask;
+			if( (h_fixed_bits_0[y] & hmask) != 0 ):
+				v_fixed_bits_0[x] |= vmask;
+		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
 	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
@@ -262,4 +279,5 @@ func _on_SaveButton_pressed():
 func _on_CheckButton_pressed():
 	init_candidates()
 	init_h_fixed()
+	hFixed_to_vFixed()
 	pass # Replace with function body.
