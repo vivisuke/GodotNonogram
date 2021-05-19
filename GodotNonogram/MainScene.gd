@@ -27,6 +27,8 @@ var last_xy = Vector2()
 var cell_val = 0
 var h_map = {}		# 水平方向手がかり数字 → 数値マップ
 var v_map = {}		# 垂直方向手がかり数字 → 数値マップ
+var h_candidates = []	# 水平方向候補リスト
+var v_candidates = []	# 垂直方向候補リスト
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
@@ -49,10 +51,13 @@ func _ready():
 	#print(map)
 	#print(map[[1, 2]])
 	build_map()
-	print("h_map.size() = ", h_map.size())
+	#print("h_map.size() = ", h_map.size())
 	#print(h_map)
-	for i in range(h_map.size()):
-		print(h_map.keys()[i], ": ", h_map.values()[i])
+	#for i in range(h_map.size()):
+	#	print(h_map.keys()[i], ": ", h_map.values()[i])
+	h_candidates.resize(N_ANS_VERT)
+	v_candidates.resize(N_ANS_HORZ)
+	print(h_candidates)
 	pass
 func _draw():
 	draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
