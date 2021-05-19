@@ -9,6 +9,7 @@ const N_CELL_HORZ = 15
 const N_CELL_VERT = 15
 const N_ANS_HORZ = 10
 const N_ANS_VERT = 10
+const BITS_MASK = (1<<N_ANS_HORZ) - 1
 const N_CLUES_HORZ = 5
 const N_CLUES_VERT = 5
 const BOARD_WIDTH = CELL_WIDTH * N_CELL_HORZ		# 手かがり領域を含めた盤面全体幅
@@ -67,6 +68,10 @@ func _ready():
 	v_clues.resize(N_ANS_HORZ)
 	h_candidates.resize(N_ANS_VERT)
 	v_candidates.resize(N_ANS_HORZ)
+	h_fixed_bits_1.resize(N_ANS_VERT)
+	h_fixed_bits_0.resize(N_ANS_VERT)
+	v_fixed_bits_1.resize(N_ANS_HORZ)
+	v_fixed_bits_0.resize(N_ANS_HORZ)
 	print(h_candidates)
 	pass
 func _draw():
@@ -95,7 +100,7 @@ func build_map():
 			g_map[key].push_back(data)
 		else:
 			g_map[key] = [data]
-func to_BinText(d : int) -> String:
+func to_binText(d : int) -> String:
 	var txt = ""
 	var mask = 1 << (N_ANS_HORZ - 1)
 	while mask != 0:
@@ -105,13 +110,12 @@ func to_BinText(d : int) -> String:
 func to_hexText(lst : Array) -> String:
 	var txt = "["
 	for i in range(lst.size()):
-		txt += to_BinText(lst[i])
+		txt += to_binText(lst[i])
 		txt += ", "
 	txt += "]"
 	return txt
 func init_candidates():
-	h_candidates.resize(N_ANS_VERT)
-	v_candidates.resize(N_ANS_HORZ)
+	print("\n*** init_candidates():")
 	for y in range(N_ANS_VERT):
 		if h_clues[y] == null:
 			h_candidates[y] = [0]
@@ -125,14 +129,28 @@ func init_candidates():
 			v_candidates[x] = g_map[v_clues[x]]
 		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
 func init_h_fixed():
+	print("\n*** init_h_fixed():")
+	h_fixed_bits_1.resize(N_ANS_HORZ)
+	v_fixed_bits_1.resize(N_ANS_HORZ)
 	for y in range(N_ANS_VERT):
 		#print(h_clues[y])
-		if h_clues[y] != null:
-			print( to_hexText(g_map[h_clues[y]]) )
+		#if h_clues[y] != null:
+		#	print( to_hexText(g_map[h_clues[y]]) )
+		#else:
+		#	print("[0]")
+		var lst = h_candidates[y]
+		if lst.size() == 1:
+			h_fixed_bits_1[y] = lst[0]
+			h_fixed_bits_0[y] = ~lst[0] & BITS_MASK
 		else:
-			print("[0]")
-	#for y in range(N_ANS_VERT):
-		
+			var bits1 = BITS_MASK
+			var bits0 = BITS_MASK
+			for i in range(lst.size()):
+				bits1 &= lst[i]
+				bits0 &= ~lst[i]
+			h_fixed_bits_1[y] = bits1
+			h_fixed_bits_0[y] = bits0
+		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
 	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
@@ -243,5 +261,5 @@ func _on_SaveButton_pressed():
 
 func _on_CheckButton_pressed():
 	init_candidates()
-	#init_h_fixed()
+	init_h_fixed()
 	pass # Replace with function body.
