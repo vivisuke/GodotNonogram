@@ -169,6 +169,16 @@ func hFixed_to_vFixed():
 				v_fixed_bits_0[x] |= vmask;
 		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
 	pass
+# v_fixed_bits_1, 0 を元に v_candidates[] から不可能なパターンを削除
+func update_v_candidates():
+	print("\n*** update_v_candidates():")
+	for x in range(N_ANS_HORZ):
+		for i in range(v_candidates[x].size()-1, -1, -1):
+			if( (v_candidates[x][i] & v_fixed_bits_1[x]) != v_fixed_bits_1[x] ||
+					(~v_candidates[x][i] & v_fixed_bits_0[x]) != v_fixed_bits_0[x] ):
+				v_candidates[x].remove(i)
+		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
 	var data = 0
@@ -280,4 +290,5 @@ func _on_CheckButton_pressed():
 	init_candidates()
 	init_h_fixed()
 	hFixed_to_vFixed()
+	update_v_candidates()
 	pass # Replace with function body.

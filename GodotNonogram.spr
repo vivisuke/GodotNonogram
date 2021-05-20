@@ -32,8 +32,8 @@
 0030 ◎ C 05/20 05/20 0.001│ToDo│init_candidates() 実装
 0031 ◎ C 05/20 05/20 0.001│ToDo│h_map, v_map は廃止、g_map だけとする（正方形専用）
 0032 ◎ C 05/20 05/20 0.001│ToDo│水平方向確定ビット → 垂直方向確定ビット変換：hFixed_to_vFixed()
-0033 ● C 05/20            │ToDo│
-0034 ● C 05/20            │ToDo│
+0033 ● C 05/20            │ToDo│図形が □ のとき、h_fixed_bits_1[0] , 0[0] の値が不正になる？
+0034 ◎ C 05/20 05/20 0.001│ToDo│update_v_candidates()
 0035 ● C 05/20            │ToDo│
 0036 ● C 05/20            │ToDo│
 0037 ● C 05/20            │ToDo│
