@@ -66,14 +66,15 @@ func _ready():
 	#	print(h_map.keys()[i], ": ", h_map.values()[i])
 	h_clues.resize(N_ANS_VERT)
 	v_clues.resize(N_ANS_HORZ)
+	pass
+func init_arrays():
 	h_candidates.resize(N_ANS_VERT)
 	v_candidates.resize(N_ANS_HORZ)
 	h_fixed_bits_1.resize(N_ANS_VERT)
 	h_fixed_bits_0.resize(N_ANS_VERT)
 	v_fixed_bits_1.resize(N_ANS_HORZ)
 	v_fixed_bits_0.resize(N_ANS_HORZ)
-	print(h_candidates)
-	pass
+	#print(h_candidates)
 func _draw():
 	#draw_rect(Rect2(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), Color(0.5, 0.75, 0.5))
 	pass
@@ -116,18 +117,29 @@ func to_hexText(lst : Array) -> String:
 	return txt
 func init_candidates():
 	print("\n*** init_candidates():")
+	print("g_map[[4]] = ", g_map[[4]])
 	for y in range(N_ANS_VERT):
+		print("h_clues[", y, "] = ", h_clues[y])
 		if h_clues[y] == null:
 			h_candidates[y] = [0]
 		else:
-			h_candidates[y] = g_map[h_clues[y]]
-		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+			h_candidates[y] = g_map[h_clues[y]].duplicate()
+		print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	for x in range(N_ANS_HORZ):
+		print("v_clues[", x, "] = ", v_clues[x])
 		if v_clues[x] == null:
 			v_candidates[x] = [0]
 		else:
-			v_candidates[x] = g_map[v_clues[x]]
-		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+			v_candidates[x] = g_map[v_clues[x]].duplicate()
+		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	print("g_map[[4]] = ", g_map[[4]])
+func num_candidates():
+	var sum = 0
+	for y in range(N_ANS_VERT):
+		sum += h_candidates[y].size()
+	for x in range(N_ANS_HORZ):
+		sum += v_candidates[x].size()
+	return sum
 # h_candidates[] を元に h_fixed_bits_1, 0 を計算
 func update_h_fixedbits():
 	print("\n*** update_h_fixedbits():")
@@ -144,7 +156,8 @@ func update_h_fixedbits():
 				bits0 &= ~lst[i]
 			h_fixed_bits_1[y] = bits1
 			h_fixed_bits_0[y] = bits0
-		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+		#print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 # v_candidates[] を元に v_fixed_bits_1, 0 を計算
 func update_v_fixedbits():
@@ -162,7 +175,8 @@ func update_v_fixedbits():
 				bits0 &= ~lst[i]
 			v_fixed_bits_1[x] = bits1
 			v_fixed_bits_0[x] = bits0
-		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+		#print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 func hFixed_to_vFixed():
 	print("\n*** hFixed_to_vFixed():")
@@ -179,7 +193,8 @@ func hFixed_to_vFixed():
 				v_fixed_bits_1[x] |= vmask;
 			if( (h_fixed_bits_0[y] & hmask) != 0 ):
 				v_fixed_bits_0[x] |= vmask;
-		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+		#print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 func vFixed_to_hFixed():
 	print("\n*** vFixed_to_hFixed():")
@@ -196,7 +211,8 @@ func vFixed_to_hFixed():
 				h_fixed_bits_1[y] |= hmask;
 			if( (v_fixed_bits_0[x] & vmask) != 0 ):
 				h_fixed_bits_0[y] |= hmask;
-		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+		#print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 # v_fixed_bits_1, 0 を元に v_candidates[] から不可能なパターンを削除
 func update_v_candidates():
@@ -206,7 +222,8 @@ func update_v_candidates():
 			if( (v_candidates[x][i] & v_fixed_bits_1[x]) != v_fixed_bits_1[x] ||
 					(~v_candidates[x][i] & v_fixed_bits_0[x]) != v_fixed_bits_0[x] ):
 				v_candidates[x].remove(i)
-		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 # h_fixed_bits_1, 0 を元に h_candidates[] から不可能なパターンを削除
 func update_h_candidates():
@@ -216,7 +233,8 @@ func update_h_candidates():
 			if( (h_candidates[y][i] & h_fixed_bits_1[y]) != h_fixed_bits_1[y] ||
 					(~h_candidates[y][i] & h_fixed_bits_0[y]) != h_fixed_bits_0[y] ):
 				h_candidates[y].remove(i)
-		print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
+	print("g_map[[4]] = ", g_map[[4]])
 	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
@@ -326,7 +344,9 @@ func _on_SaveButton_pressed():
 
 
 func _on_CheckButton_pressed():
+	init_arrays()
 	init_candidates()
+	print("num candidates = ", num_candidates())
 	update_h_fixedbits()
 	hFixed_to_vFixed()
 	update_v_candidates()
