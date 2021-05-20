@@ -279,6 +279,7 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("click"):
 			#print(event.position)
+			$MessLabel.text = ""
 			var xy = posToXY(event.position)
 			print(xy)
 			if xy.x >= 0:
