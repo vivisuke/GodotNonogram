@@ -41,6 +41,7 @@ var v_fixed_bits_0 = []
 
 func _ready():
 	#print("BD WD = ", BOARD_WIDTH)
+	#$TileMapBG.set_cell(0, 0, 0)
 	#$TileMap.set_cell(0, 0, 0)
 	#$TileMap.set_cell(1, 1, 1)
 	#$TileMap.set_cell(1, -1, 2)
@@ -264,6 +265,10 @@ func update_clues(x0, y0):
 		$TileMap.set_cell(x0, y, -1)
 		y -= 1
 	pass
+func clearTileMapBG():
+	for y in range(N_ANS_VERT):
+		for x in range(N_ANS_HORZ):
+			$TileMapBG.set_cell(x, y, -1)
 func posToXY(pos):
 	var xy = Vector2(-1, -1)
 	var X0 = $TileMap.position.x
@@ -280,6 +285,7 @@ func _input(event):
 		if event.is_action_pressed("click"):
 			#print(event.position)
 			$MessLabel.text = ""
+			clearTileMapBG()
 			var xy = posToXY(event.position)
 			print(xy)
 			if xy.x >= 0:
@@ -366,20 +372,25 @@ func _on_CheckButton_pressed():
 		update_h_candidates()
 	print(solved)
 	if solved:
+		$MessLabel.add_color_override("font_color", Color("black"))
 		$MessLabel.text = "Propper Quest"
 	else:
+		$MessLabel.add_color_override("font_color", Color("#ff0000"))
 		$MessLabel.text = "Impropper Quest"
 	var txt = ""
 	for y in range(N_ANS_VERT):
 		#print(to_binText(h_fixed_bits_1[y]), " ", to_binText(h_fixed_bits_0[y]))
 		var mask = 1<<(N_ANS_HORZ-1)
+		var x = -1
 		while mask != 0:
+			x += 1
 			if (h_fixed_bits_1[y] & mask) != 0:
 				txt += "#"
 			elif (h_fixed_bits_0[y] & mask) != 0:
 				txt += "."
 			else:
 				txt += "?"
+				$TileMapBG.set_cell(x, y, 0)	# yellow
 			mask >>= 1
 		txt += "\n"
 	print(txt)
