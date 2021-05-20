@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://images/board.png" type="Texture" id=2]
@@ -24,6 +24,10 @@
 [ext_resource path="res://fonts/arial.ttf" type="DynamicFontData" id=22]
 [ext_resource path="res://images/check_black.png" type="Texture" id=23]
 [ext_resource path="res://images/check_white.png" type="Texture" id=24]
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+font_data = ExtResource( 22 )
 
 [sub_resource type="TileSet" id=1]
 0/name = "cross30x30.png 0"
@@ -222,6 +226,17 @@ script = ExtResource( 1 )
 margin_right = 460.0
 margin_bottom = 800.0
 color = Color( 0.501961, 0.752941, 0.501961, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MessLabel" type="Label" parent="."]
+margin_left = 10.0794
+margin_top = 52.9167
+margin_right = 176.079
+margin_bottom = 88.9167
+custom_fonts/font = SubResource( 4 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

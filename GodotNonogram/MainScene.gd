@@ -364,6 +364,10 @@ func _on_CheckButton_pressed():
 		vFixed_to_hFixed()
 		update_h_candidates()
 	print(solved)
+	if solved:
+		$MessLabel.text = "Propper Quest"
+	else:
+		$MessLabel.text = "Impropper Quest"
 	var txt = ""
 	for y in range(N_ANS_VERT):
 		#print(to_binText(h_fixed_bits_1[y]), " ", to_binText(h_fixed_bits_0[y]))
