@@ -34,7 +34,7 @@
 0032 ◎ C 05/20 05/20 0.001│ToDo│水平方向確定ビット → 垂直方向確定ビット変換：hFixed_to_vFixed()
 0033 ● C 05/20            │ToDo│図形が □ のとき、h_fixed_bits_1[0] , 0[0] の値が不正になる？
 0034 ◎ C 05/20 05/20 0.001│ToDo│update_v_candidates()
-0035 ● C 05/20            │ToDo│
+0035 ◎ C 05/20 05/20 0.001│ToDo│udate_fixed_bits()
 0036 ● C 05/20            │ToDo│
 0037 ● C 05/20            │ToDo│
 0038 ● C 05/20            │ToDo│

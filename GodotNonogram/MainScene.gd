@@ -128,16 +128,10 @@ func init_candidates():
 		else:
 			v_candidates[x] = g_map[v_clues[x]]
 		#print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
-func init_h_fixed():
-	print("\n*** init_h_fixed():")
-	h_fixed_bits_1.resize(N_ANS_HORZ)
-	v_fixed_bits_1.resize(N_ANS_HORZ)
+# h_candidates[] を元に h_fixed_bits_1, 0 を計算
+func update_h_fixedbits():
+	print("\n*** update_h_fixedbits():")
 	for y in range(N_ANS_VERT):
-		#print(h_clues[y])
-		#if h_clues[y] != null:
-		#	print( to_hexText(g_map[h_clues[y]]) )
-		#else:
-		#	print("[0]")
 		var lst = h_candidates[y]
 		if lst.size() == 1:
 			h_fixed_bits_1[y] = lst[0]
@@ -151,6 +145,24 @@ func init_h_fixed():
 			h_fixed_bits_1[y] = bits1
 			h_fixed_bits_0[y] = bits0
 		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	pass
+# v_candidates[] を元に v_fixed_bits_1, 0 を計算
+func update_v_fixedbits():
+	print("\n*** update_v_fixedbits():")
+	for x in range(N_ANS_HORZ):
+		var lst = v_candidates[x]
+		if lst.size() == 1:
+			v_fixed_bits_1[x] = lst[0]
+			v_fixed_bits_0[x] = ~lst[0] & BITS_MASK
+		else:
+			var bits1 = BITS_MASK
+			var bits0 = BITS_MASK
+			for i in range(lst.size()):
+				bits1 &= lst[i]
+				bits0 &= ~lst[i]
+			v_fixed_bits_1[x] = bits1
+			v_fixed_bits_0[x] = bits0
+		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
 	pass
 func hFixed_to_vFixed():
 	print("\n*** hFixed_to_vFixed():")
@@ -288,7 +300,8 @@ func _on_SaveButton_pressed():
 
 func _on_CheckButton_pressed():
 	init_candidates()
-	init_h_fixed()
+	update_h_fixedbits()
 	hFixed_to_vFixed()
 	update_v_candidates()
+	update_v_fixedbits()
 	pass # Replace with function body.
