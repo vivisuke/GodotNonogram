@@ -181,6 +181,23 @@ func hFixed_to_vFixed():
 				v_fixed_bits_0[x] |= vmask;
 		print("v_fixed[", x , "] = ", to_binText(v_fixed_bits_1[x]), ", ", to_binText(v_fixed_bits_0[x]))
 	pass
+func vFixed_to_hFixed():
+	print("\n*** vFixed_to_hFixed():")
+	for y in range(N_ANS_VERT):
+		h_fixed_bits_1[y] = 0
+		h_fixed_bits_0[y] = 0
+	var vmask = 1 << N_ANS_VERT;
+	for y in range(N_ANS_VERT):
+		vmask >>= 1
+		var hmask = 1 << N_ANS_HORZ;
+		for x in range(N_ANS_HORZ):
+			hmask >>= 1
+			if( (v_fixed_bits_1[x] & vmask) != 0 ):
+				h_fixed_bits_1[y] |= hmask;
+			if( (v_fixed_bits_0[x] & vmask) != 0 ):
+				h_fixed_bits_0[y] |= hmask;
+		print("h_fixed[", y , "] = ", to_binText(h_fixed_bits_1[y]), ", ", to_binText(h_fixed_bits_0[y]))
+	pass
 # v_fixed_bits_1, 0 を元に v_candidates[] から不可能なパターンを削除
 func update_v_candidates():
 	print("\n*** update_v_candidates():")
@@ -190,6 +207,16 @@ func update_v_candidates():
 					(~v_candidates[x][i] & v_fixed_bits_0[x]) != v_fixed_bits_0[x] ):
 				v_candidates[x].remove(i)
 		print( "v_cand[", x, "] = ", to_hexText(v_candidates[x]) )
+	pass
+# h_fixed_bits_1, 0 を元に h_candidates[] から不可能なパターンを削除
+func update_h_candidates():
+	print("\n*** update_h_candidates():")
+	for y in range(N_ANS_VERT):
+		for i in range(h_candidates[y].size()-1, -1, -1):
+			if( (h_candidates[y][i] & h_fixed_bits_1[y]) != h_fixed_bits_1[y] ||
+					(~h_candidates[y][i] & h_fixed_bits_0[y]) != h_fixed_bits_0[y] ):
+				h_candidates[y].remove(i)
+		print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
@@ -304,4 +331,6 @@ func _on_CheckButton_pressed():
 	hFixed_to_vFixed()
 	update_v_candidates()
 	update_v_fixedbits()
+	vFixed_to_hFixed()
+	update_h_candidates()
 	pass # Replace with function body.
