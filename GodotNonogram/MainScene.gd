@@ -23,6 +23,9 @@ const ANS_X0 = BOARD_X0 + CELL_WIDTH * 5			# 解答領域左端座標
 const TILE_NUM_0 = 1
 const ColorClues = Color("#dff9fb")
 
+enum { MODE_SOLVE, MODE_EDIT_PICT, MODE_EDIT_CLUES }
+
+var mode = MODE_EDIT_PICT;
 var dialog_opened = false;
 var mouse_pushed = false
 var last_xy = Vector2()
@@ -39,7 +42,11 @@ var h_fixed_bits_0 = []
 var v_fixed_bits_1 = []
 var v_fixed_bits_0 = []
 
+
+
 func _ready():
+	mode = MODE_EDIT_PICT
+	update_modeButtons()
 	#print("BD WD = ", BOARD_WIDTH)
 	#$TileMapBG.set_cell(0, 0, 0)
 	#$TileMap.set_cell(0, 0, 0)
@@ -237,6 +244,8 @@ func update_h_candidates():
 		#print( "h_cand[", y, "] = ", to_hexText(h_candidates[y]) )
 	#print("g_map[[4]] = ", g_map[[4]])
 	pass
+func check_clues(x0, y0):
+	pass
 func update_clues(x0, y0):
 	# 水平方向手がかり数字
 	var data = 0
@@ -265,6 +274,14 @@ func update_clues(x0, y0):
 		$TileMap.set_cell(x0, y, -1)
 		y -= 1
 	pass
+func clearImageTileMap():
+	for y in range(N_ANS_VERT):
+		for x in range(N_ANS_HORZ):
+			$ImageTileMap.set_cell(x, y, -1)
+func clearTileMap():
+	for y in range(N_ANS_VERT):
+		for x in range(N_ANS_HORZ):
+			$TileMap.set_cell(x, y, -1)
 func clearTileMapBG():
 	for y in range(N_ANS_VERT):
 		for x in range(N_ANS_HORZ):
@@ -284,10 +301,10 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("click"):
 			#print(event.position)
-			$MessLabel.text = ""
-			clearTileMapBG()
 			var xy = posToXY(event.position)
 			print(xy)
+			$MessLabel.text = ""
+			clearTileMapBG()
 			if xy.x >= 0:
 				mouse_pushed = true;
 				last_xy = xy
@@ -296,7 +313,10 @@ func _input(event):
 				v = -v;
 				cell_val = v
 				$TileMap.set_cell(xy.x, xy.y, v)
-				update_clues(xy.x, xy.y)
+				if mode == MODE_EDIT_PICT:
+					update_clues(xy.x, xy.y)
+				elif mode == MODE_SOLVE:
+					check_clues(xy.x, xy.y)
 				var img = 0 if v == 1 else -1
 				$ImageTileMap.set_cell(xy.x, xy.y, img)
 		elif event.is_action_released("click"):
@@ -394,4 +414,27 @@ func _on_CheckButton_pressed():
 			mask >>= 1
 		txt += "\n"
 	print(txt)
+	pass # Replace with function body.
+func update_modeButtons():
+	if mode == MODE_SOLVE:
+		$SolveButton.add_color_override("font_color", Color.white)
+		$SolveButton.icon = load("res://images/light_white.png")
+		$EditButton.add_color_override("font_color", Color.darkgray)
+		$EditButton.icon = load("res://images/edit_gray.png")
+	elif mode == MODE_EDIT_PICT:
+		$SolveButton.add_color_override("font_color", Color.darkgray)
+		$SolveButton.icon = load("res://images/light_gray.png")
+		$EditButton.add_color_override("font_color", Color.white)
+		$EditButton.icon = load("res://images/edit_white.png")
+	pass
+func _on_SolveButton_pressed():
+	mode = MODE_SOLVE
+	update_modeButtons()
+	clearImageTileMap()
+	#clearTileMapBG()
+	clearTileMap()
+	pass # Replace with function body.
+func _on_EditButton_pressed():
+	mode = MODE_EDIT_PICT
+	update_modeButtons()
 	pass # Replace with function body.

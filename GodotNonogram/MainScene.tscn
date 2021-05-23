@@ -422,3 +422,5 @@ __meta__ = {
 [connection signal="pressed" from="OpenButton" to="." method="_on_OpenButton_pressed"]
 [connection signal="pressed" from="SaveButton" to="." method="_on_SaveButton_pressed"]
 [connection signal="pressed" from="CheckButton" to="." method="_on_CheckButton_pressed"]
+[connection signal="pressed" from="SolveButton" to="." method="_on_SolveButton_pressed"]
+[connection signal="pressed" from="EditButton" to="." method="_on_EditButton_pressed"]
