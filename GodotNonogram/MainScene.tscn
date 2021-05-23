@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://MainScene.gd" type="Script" id=1]
 [ext_resource path="res://images/board.png" type="Texture" id=2]
@@ -26,6 +26,8 @@
 [ext_resource path="res://images/check_white.png" type="Texture" id=24]
 [ext_resource path="res://images/yellow30x30.png" type="Texture" id=25]
 [ext_resource path="res://images/grid.png" type="Texture" id=26]
+[ext_resource path="res://images/light_white.png" type="Texture" id=27]
+[ext_resource path="res://images/edit_white.png" type="Texture" id=28]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -237,6 +239,10 @@ font_data = ExtResource( 22 )
 size = 28
 font_data = ExtResource( 22 )
 
+[sub_resource type="DynamicFont" id=6]
+size = 24
+font_data = ExtResource( 22 )
+
 [node name="MainScene" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -384,6 +390,30 @@ margin_bottom = 124.0
 custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Check"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SolveButton" type="Button" parent="."]
+margin_left = 20.0
+margin_top = 25.0
+margin_right = 141.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 6 )
+text = "Solve"
+icon = ExtResource( 27 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EditButton" type="Button" parent="."]
+margin_left = 170.0
+margin_top = 25.0
+margin_right = 317.0
+margin_bottom = 79.0
+custom_fonts/font = SubResource( 6 )
+text = "Edit pict"
+icon = ExtResource( 28 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
